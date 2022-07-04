@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package grpc_playground;
+
+message Order {
+  int64 instrumentID = 1;
+  int64 price = 2;
+  int64 quantity = 3;
+  bool side = 4;
+}
+
+message OrderReply {
+  bool result = 1;
+}
+
+service OrderService {
+  rpc AddOrder(Order) returns ( OrderReply ) {  }
+}
