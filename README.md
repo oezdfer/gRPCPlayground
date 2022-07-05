@@ -37,6 +37,10 @@ The *multiple* gRPC clients is used to simulate several *gRPC clients*.
 
 All gRPC clients is based on the same logic. They simply send an Order to the gRPC server. 
 
+### Localhost test results
+
+The gRPC server and multiple gRPC clients run on the same local server (AWS).
+
 ```python
 python3 grcp_clients.py --no-of-clients=100000 --count=1000000
 
@@ -70,4 +74,30 @@ transactions and elapsed time 27.5429 in seconds
 ✔ 7.9.2009  cd827@ip-10-112-151-152 ~/PycharmProjects/grpc_playground $ python3 grcp_clients.py --no-of-clients=10000 --count=100000
 Number of clients 10000 and number of order transactions 100000
 transactions and elapsed time 27.7686 in seconds
+```
+
+### Server to Server test results
+
+The gRPC server and multiple gRPC clients run on the different server (AWS - Red Hat 7).
+
+```python
+✔ 7.9.2009  cd827@ip-10-112-151-152 ~/PycharmProjects/grpc_playground $ python3 grcp_clients.py --no-of-clients=1000 --count=1000
+Number of clients 1000 and number of order transactions 1000
+transactions and elapsed time 1.4660 in seconds
+✔ 7.9.2009  cd827@ip-10-112-151-152 ~/PycharmProjects/grpc_playground $ python3 grcp_clients.py --no-of-clients=1000 --count=10000
+Number of clients 1000 and number of order transactions 10000
+transactions and elapsed time 17.7699 in seconds
+✔ 7.9.2009  cd827@ip-10-112-151-152 ~/PycharmProjects/grpc_playground $ python3 grcp_clients.py --no-of-clients=1000 --count=100000
+Number of clients 1000 and number of order transactions 100000
+transactions and elapsed time 166.9796 in seconds
+✔ 7.9.2009  cd827@ip-10-112-151-152 ~/PycharmProjects/grpc_playground $ python3 grcp_clients.py --no-of-clients=5000 --count=10000
+Number of clients 5000 and number of order transactions 10000
+transactions and elapsed time 14.2598 in seconds
+✔ 7.9.2009  cd827@ip-10-112-151-152 ~/PycharmProjects/grpc_playground $ python3 grcp_clients.py --no-of-clients=10000 --count=10000
+Number of clients 10000 and number of order transactions 10000
+transactions and elapsed time 17.6165 in seconds
+✔ 7.9.2009  cd827@ip-10-112-151-152 ~/PycharmProjects/grpc_playground $ python3 grcp_clients.py --no-of-clients=20000 --count=10000
+Number of clients 20000 and number of order transactions 10000
+transactions and elapsed time 17.2865 in seconds
+
 ```
