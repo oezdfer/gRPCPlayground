@@ -52,3 +52,20 @@ Number of clients 100000 and number of order transactions 1000000
 9000 transactions and elapsed time 2.3582 in seconds
 10000 transactions and elapsed time 2.6195 in seconds
 ```
+
+Several runs with different number of gRPC clients:
+
+```python
+✔ 7.9.2009  cd827@ip-10-112-151-152 ~/PycharmProjects/grpc_playground $ python3 grcp_clients.py --no-of-clients=1000 --count=1000
+Number of clients 1000 and number of order transactions 1000
+transactions and elapsed time 0.2859 in seconds
+✔ 7.9.2009  cd827@ip-10-112-151-152 ~/PycharmProjects/grpc_playground $ python3 grcp_clients.py --no-of-clients=1000 --count=10000
+Number of clients 1000 and number of order transactions 10000
+transactions and elapsed time 2.7039 in seconds
+✔ 7.9.2009  cd827@ip-10-112-151-152 ~/PycharmProjects/grpc_playground $ python3 grcp_clients.py --no-of-clients=1000 --count=100000
+Number of clients 1000 and number of order transactions 100000
+transactions and elapsed time 27.5429 in seconds
+✔ 7.9.2009  cd827@ip-10-112-151-152 ~/PycharmProjects/grpc_playground $ python3 grcp_clients.py --no-of-clients=10000 --count=100000
+Number of clients 10000 and number of order transactions 100000
+transactions and elapsed time 27.7686 in seconds
+```
