@@ -1,5 +1,7 @@
 # grcpPlayground
 
+This gRPC GitHub repository is used to analyze gRPC protocol with different scenario.
+
 ## Create .proto
 
 The Protocol buffer compiler *protoc* is used to create the languange specific artifacts.
