@@ -4,6 +4,10 @@
 
 python3 -m grpc_tools.protoc -I. --grpc_python_out=. --python_out=. order.proto
 
+or
+
+python3 run_codegen.py
+
 ## gRPC Server
 
 python3 grpc_server.py --help
