@@ -2,6 +2,8 @@
 
 ## Create .proto
 
+The Protocol buffer compiler *protoc* is used to create the languange specific artifacts.
+
 ```python
 python3 -m grpc_tools.protoc -I. --grpc_python_out=. --python_out=. order.proto
 ```
@@ -14,14 +16,24 @@ python3 run_codegen.py
 
 ## gRPC Server
 
+The gRPC server runs with a threadpool with 10 workers. 
+
+The gRPC server receives the sent orders by the gRPC clients and replies with a Boolean that the order is received.
+
 ```python
 python3 grpc_server.py --help
 ```
 
-
 ## gRPC Client
 
+The gRPC clients sends an *Order* by using the protocol buffer to the gRPC server.  
+
+
 ## Multiple gRPC Clients
+
+The *multiple* gRPC clients is used to simulate several *gRPC clients*. 
+
+All gRPC clients is based on the same logic. They simply send an Order to the gRPC server. 
 
 ```python
 python3 grcp_clients.py --no-of-clients=100000 --count=1000000
