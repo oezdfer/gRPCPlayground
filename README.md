@@ -2,21 +2,30 @@
 
 ## Create .proto
 
+```python
 python3 -m grpc_tools.protoc -I. --grpc_python_out=. --python_out=. order.proto
-
+```
 or
 
+```python
 python3 run_codegen.py
+```
+
 
 ## gRPC Server
 
+```python
 python3 grpc_server.py --help
+```
+
 
 ## gRPC Client
 
 ## Multiple gRPC Clients
 
+```python
 python3 grcp_clients.py --no-of-clients=100000 --count=1000000
+
 
 Number of clients 100000 and number of order transactions 1000000
 0 transactions and elapsed time 0.0016 in seconds
@@ -30,3 +39,4 @@ Number of clients 100000 and number of order transactions 1000000
 8000 transactions and elapsed time 2.0970 in seconds
 9000 transactions and elapsed time 2.3582 in seconds
 10000 transactions and elapsed time 2.6195 in seconds
+```
