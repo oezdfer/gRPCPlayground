@@ -1,10 +1,10 @@
 # grcpPlayground
 
-This gRPC GitHub repository is used to analyze gRPC protocol with different scenario.
+This __gRPC__ (*G*oogle *R*emote *P*roceduce *C*alls) GitHub repository is used to analyze gRPC protocol with different scenarios.
 
-## Create .proto
+## Create .proto artifacts
 
-The Protocol buffer compiler *protoc* is used to create the languange specific artifacts.
+The Protocol buffer compiler __protoc__ is used to create the programming languange specific artifacts.
 
 ```python
 python3 -m grpc_tools.protoc -I. --grpc_python_out=. --python_out=. order.proto
@@ -18,7 +18,7 @@ python3 run_codegen.py
 
 ## gRPC Server
 
-The gRPC server runs with a threadpool with 10 workers. 
+The gRPC server runs with a threadpool with __10__ workers. 
 
 The gRPC server receives the sent orders by the gRPC clients and replies with a Boolean that the order is received.
 
