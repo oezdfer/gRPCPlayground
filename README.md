@@ -1,10 +1,27 @@
-# grcpPlayground
+# Google Remote Procedure Calls (gRPC) Playground
 
-This gRPC GitHub repository is used to analyze gRPC protocol with different scenario.
+This __gRPC__ GitHub repository is used to analyze gRPC protocol with different scenario:
 
-## Create .proto
+* localhost latency
+* server-to-server latency
+* server-to-server latency with encryption
 
-The Protocol buffer compiler *protoc* is used to create the languange specific artifacts.
+## Create .proto artifacts
+
+The Google Protocol buffer compiler *protoc* is used to create the programming languange specific artifacts.
+
+An *Order* of 25 - byte is used for the prototyping:
+
+```
+message Order {
+  int64 instrumentID = 1;
+  int64 price = 2;
+  int64 quantity = 3;
+  bool side = 4;
+}
+```
+
+The corresponding python artifacts are created by using:
 
 ```python
 python3 -m grpc_tools.protoc -I. --grpc_python_out=. --python_out=. order.proto
@@ -16,9 +33,9 @@ python3 run_codegen.py
 ```
 
 
-## gRPC Server
+## Single gRPC Server
 
-The gRPC server runs with a threadpool with 10 workers. 
+The single gRPC server runs with a threadpool with *10* workers. 
 
 The gRPC server receives the sent orders by the gRPC clients and replies with a Boolean that the order is received.
 
@@ -26,9 +43,9 @@ The gRPC server receives the sent orders by the gRPC clients and replies with a 
 python3 grpc_server.py --help
 ```
 
-## gRPC Client
+## Single gRPC Client
 
-The gRPC clients sends an *Order* by using the protocol buffer to the gRPC server.  
+The gRPC clients sends an *Order* by using the Google protocol buffer to the gRPC server.  
 
 
 ## Multiple gRPC Clients

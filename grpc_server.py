@@ -1,6 +1,7 @@
 #! /usr/bin/python3
-import sys
+
 from concurrent import futures
+import sys
 import time
 import logging
 import argparse
@@ -10,6 +11,9 @@ import order_pb2
 import order_pb2_grpc
 
 
+"""
+Order Receiver class
+"""
 class Greeter(order_pb2_grpc.OrderService):
 
     def AddOrder(self, order):
@@ -18,27 +22,58 @@ class Greeter(order_pb2_grpc.OrderService):
 
 def serve():
 
+    print("gRCP Server is started to serve ...")
+
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+
     order_pb2_grpc.add_OrderServiceServicer_to_server(Greeter, server)
-    server.add_insecure_port('[::]:50051')
+
+    # Certificate Authority (CA) certificate handling on server
+    
+    port = 50051
+    #server_host = 'localhost'
+    keyfile = 'server.key'
+    certfile = 'server.crt'
+    private_key = open(keyfile, 'rb').read()
+    certificate_chain = open(certfile, 'rb').read()
+    credentials = grpc.ssl_server_credentials([(private_key, certificate_chain)])
+
+    #server.add_secure_port(server_host + ':' + str(port), credentials)
+    server.add_secure_port('[::]:' + str(port), credentials)
+
+    #print("Start listening {}:{}".format(server_host, port))
+    
+    #server.add_secure_port('[::]:' + str(port), credentials)
+    #server.add_insecure_port('[::]:50051')
+    
+    print( server.__repr__ ) 
     server.start()
 
     server.wait_for_termination()
 
 
+"""
+Main
+"""
 if __name__ == '__main__':
 
-    p = argparse.ArgumentParser('A python implementation of gRPC client')
+    p = argparse.ArgumentParser('A python implementation of gRPC server')
 
-    p.add_argument('-l', '--localhost', metavar='localhost', nargs=1,
+    p.add_argument('-l', '--localhost', type=str, metavar='localhost',
                    help='whether the localhost is used for the gRPC connection test.')
-    p.add_argument('-t', '--tsl', metavar='tsl', nargs=1,
+    p.add_argument('-r', '--remote-host', type=str, metavar='remote_host', dest='remote_host',
+                   help='remote host is used for the gRPC connection test.')
+    p.add_argument('-t', '--tsl', metavar='tsl',
                    help='whether a remote host uses a TSL gRPC connection.')
 
-    arg = p.parse_args()
+    args = p.parse_args()
 
     print("gRCP Server is started to run ...")
+    print("Arguments {} ".format(args))
 
+    if args.remote_host:
+         print("Remote host {}".format(args.remote_host))
+    
     logging.basicConfig()
 
     while True:
@@ -57,5 +92,4 @@ if __name__ == '__main__':
             exit()
 
         finally:
-
-            exit()
+             exit()

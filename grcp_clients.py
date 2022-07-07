@@ -20,6 +20,8 @@ if __name__ == "__main__":
     # parse to get the arguments
     args = p.parse_args()
 
+    print("Arguments {} ".format(args))
+    
     # declare a dictionary for the gRCP clients
     processes = {}
 
@@ -27,8 +29,8 @@ if __name__ == "__main__":
 
     # To run each gRCP client
     for i in range(args.client_count):
+        #processes[i] = Process(target=client.run(args.count))
         processes[i] = Process(target=client.run(args.count))
-
     # start all gRCP clients
     for i in range(args.client_count):
         processes[i].start()
