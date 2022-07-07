@@ -12,7 +12,7 @@ The Google Protocol buffer compiler *protoc* is used to create the programming l
 
 An *Order* of 25 - byte is used for the prototyping:
 
-```
+``` python
 message Order {
   int64 instrumentID = 1;
   int64 price = 2;
@@ -22,16 +22,6 @@ message Order {
 ```
 
 The corresponding python artifacts are created by using:
-
-```python
-python3 -m grpc_tools.protoc -I. --grpc_python_out=. --python_out=. order.proto
-```
-or
-
-```python
-python3 run_codegen.py
-```
-
 
 ## Single gRPC Server
 
@@ -46,7 +36,6 @@ python3 grpc_server.py --help
 ## Single gRPC Client
 
 The gRPC clients sends an *Order* by using the Google protocol buffer to the gRPC server.  
-
 
 ## Multiple gRPC Clients
 
