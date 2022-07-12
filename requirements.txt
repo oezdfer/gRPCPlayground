@@ -1,6 +1,7 @@
 protobuf3
 grpc
 grcpio
+grpcio-interceptors
 grpcio-tools
 setuptools
 wheel

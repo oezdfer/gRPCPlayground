@@ -20,9 +20,9 @@ if __name__ == "__main__":
         help='Number of clients')
     p.add_argument('-c', '--count', type=int, dest='count', action='store', default=10,
         help='counter for the sending orders')
-    p.add_argument('-v', '--verbose', type=Boolean, dest='verbose', action='store', default=False,
-        help='Verbose mode for logging')
-
+    p.add_argument('-v', '--verbose', action='store_true',
+        help='Verbose mode for logging')    
+    
     # parse to get the arguments
     args = p.parse_args()
 
@@ -48,6 +48,3 @@ if __name__ == "__main__":
     # start all gRCP clients
     for i in range(args.client_count):
         processes[i].start()
-
-
-

@@ -11,11 +11,25 @@ import grpc
 import order_pb2
 import order_pb2_grpc
 
+from grpc_interceptor import ServerInterceptor
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(name)s | %(levelname)s | %(message)s')
 
 # A common Logger
 logger = logging.getLogger('gRPC_playground')
+
+
+class ErrorLoggerInterceptor(ServerInterceptor):
+    
+    def intercept(self, method, request, context, method_name):
+        try:
+            return method(request, context)
+        except Exception as e:
+            self.log_error(e)
+            raise
+
+    def log_error(self, e: Exception) -> None:
+        print("log error")
 
 
 """
@@ -28,11 +42,12 @@ class Greeter(order_pb2_grpc.OrderService):
         return order_pb2.OrderReply(result=True)
 
 
-def serve( server_address=None, use_tsl=None ):
+def serve( server_address=None, port=None, use_tsl=None ):
 
     logger.info("gRCP Server is started to serve ...")
 
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    interceptors = [ErrorLoggerInterceptor()]
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10), interceptors=interceptors)
 
     order_pb2_grpc.add_OrderServiceServicer_to_server(Greeter, server)
 
@@ -56,7 +71,6 @@ def serve( server_address=None, use_tsl=None ):
     #server.add_secure_port('[::]:' + str(port), credentials)
     #server.add_insecure_port('[::]:50051')
     
-    #logger.debug( server.__repr__ ) 
     server.start()
 
     server.wait_for_termination()
@@ -73,9 +87,11 @@ if __name__ == '__main__':
         help='whether the localhost is used for the gRPC connection test.')
     p.add_argument('-s', '--server-address', metavar='server_address', dest='server_address',
         help='server host is used for the gRPC connection test.')
+    p.add_argument('-p', '--port', metavar='port', dest='port',
+        help='port is used for the gRPC connection test.')    
     p.add_argument('-t', '--use-tsl', metavar='tsl', dest='use_tsl',
         help='whether a remote host uses a TSL gRPC connection.')
-    p.add_argument('-v', '--verbose', type=Boolean, dest='verbose', action='store', default=False,
+    p.add_argument('-v', '--verbose', action='store_true',
         help='Verbose mode for logging')               
 
     args = p.parse_args()
@@ -88,6 +104,9 @@ if __name__ == '__main__':
 
     if args.server_address:
          logger.info("Remote host {}".format(args.server_address))
+
+    if args.port:
+        logger.info("Port {}".format(args.port))    
 
     if args.use_tsl:
          logger.info("Use TSL host {}".format(args.use_tsl))
