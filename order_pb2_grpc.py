@@ -14,7 +14,7 @@ class OrderServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.AddOrder = channel.unary_unary(
+        self.AddOrder = channel.stream_stream(
                 '/grpc_playground.OrderService/AddOrder',
                 request_serializer=order__pb2.Order.SerializeToString,
                 response_deserializer=order__pb2.OrderReply.FromString,
@@ -24,7 +24,7 @@ class OrderServiceStub(object):
 class OrderServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def AddOrder(self, request, context):
+    def AddOrder(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -33,7 +33,7 @@ class OrderServiceServicer(object):
 
 def add_OrderServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'AddOrder': grpc.unary_unary_rpc_method_handler(
+            'AddOrder': grpc.stream_stream_rpc_method_handler(
                     servicer.AddOrder,
                     request_deserializer=order__pb2.Order.FromString,
                     response_serializer=order__pb2.OrderReply.SerializeToString,
@@ -49,7 +49,7 @@ class OrderService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def AddOrder(request,
+    def AddOrder(request_iterator,
             target,
             options=(),
             channel_credentials=None,
@@ -59,7 +59,7 @@ class OrderService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/grpc_playground.OrderService/AddOrder',
+        return grpc.experimental.stream_stream(request_iterator, target, '/grpc_playground.OrderService/AddOrder',
             order__pb2.Order.SerializeToString,
             order__pb2.OrderReply.FromString,
             options, channel_credentials,

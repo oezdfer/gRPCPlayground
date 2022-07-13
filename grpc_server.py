@@ -34,27 +34,30 @@ class ErrorLoggerInterceptor(ServerInterceptor):
 """
 Order Receiver class
 """
+
 class Greeter(order_pb2_grpc.OrderService):
 
-    def AddOrder(self, order):
-        logger.debug("Order received with {}".format(order))
-        return order_pb2.OrderReply(result=True)
+    def AddOrder(self, order_request, context):
+        logger.debug("Order received with {}".format(order_request))
+       
+        #return order_pb2.OrderReply(result=True)
+        yield order_pb2.OrderReply(result=True)
 
 
-def serve(server_address=None, port=None, use_tsl=None):
+def serve(server_address=None, port=None, use_tsl=None, max_workers=None):
 
     """
-    :brief Serve method 
-    :param server_address 
-    :param port 
-    :param use_tsl
+    :brief Serve method for the gRPC server
+    :param server_address local host or a remote server
+    :param port a SSL port such as 443 ? 
+    :param use_tsl whether an encryption is used
     """
     logger.info("gRCP Server is started to serve ...")
 
     interceptors = [ErrorLoggerInterceptor()]
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10), interceptors=interceptors)
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=max_workers), interceptors=interceptors)
 
-    order_pb2_grpc.add_OrderServiceServicer_to_server(Greeter, server)
+    order_pb2_grpc.add_OrderServiceServicer_to_server(Greeter(), server)
 
     # Certificate Authority (CA) certificate handling on server
     
@@ -88,6 +91,8 @@ if __name__ == '__main__':
 
     p = argparse.ArgumentParser('A python implementation of gRPC server')
 
+    p.add_argument('-w', '--max-workers', dest='max_workers', default=10,
+        help='mayimum number of workers for the threadpool used by.')
     p.add_argument('-l', '--localhost', metavar='localhost',
         help='whether the localhost is used for the gRPC connection test.')
     p.add_argument('-s', '--server-address', metavar='server_address', dest='server_address',
@@ -117,6 +122,9 @@ if __name__ == '__main__':
     if args.use_tsl:
          logger.info("Use TSL host {}".format(args.use_tsl))
 
+    if args.max_workers:
+         logger.info("Used max workers for thread pool {}".format(args.max_workers))
+
     while True:
         try:
 
@@ -124,7 +132,7 @@ if __name__ == '__main__':
             start_time = time.perf_counter()
 
             logger.debug("Serve with server address {}".format(args.server_address))
-            serve(args.server_address, args.use_tsl)
+            serve(args.server_address, args.use_tsl, args.max_workers)
 
         except KeyboardInterrupt:
 

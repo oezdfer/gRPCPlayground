@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0border.proto\x12\x0fgrpc_playground\"L\n\x05Order\x12\x14\n\x0cinstrumentID\x18\x01 \x01(\x03\x12\r\n\x05price\x18\x02 \x01(\x03\x12\x10\n\x08quantity\x18\x03 \x01(\x03\x12\x0c\n\x04side\x18\x04 \x01(\x08\"\x1c\n\nOrderReply\x12\x0e\n\x06result\x18\x01 \x01(\x08\x32Q\n\x0cOrderService\x12\x41\n\x08\x41\x64\x64Order\x12\x16.grpc_playground.Order\x1a\x1b.grpc_playground.OrderReply\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0border.proto\x12\x0fgrpc_playground\"a\n\x05Order\x12\x14\n\x0cinstrumentID\x18\x01 \x01(\x03\x12\r\n\x05price\x18\x02 \x01(\x03\x12\x10\n\x08quantity\x18\x03 \x01(\x03\x12\x0c\n\x04side\x18\x04 \x01(\x08\x12\x13\n\x0brequestTime\x18\x05 \x01(\x03\"2\n\nOrderReply\x12\x0e\n\x06result\x18\x01 \x01(\x08\x12\x14\n\x0cresponseTime\x18\x02 \x01(\x03\x32U\n\x0cOrderService\x12\x45\n\x08\x41\x64\x64Order\x12\x16.grpc_playground.Order\x1a\x1b.grpc_playground.OrderReply\"\x00(\x01\x30\x01\x62\x06proto3')
 
 
 
@@ -39,9 +39,9 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   _ORDER._serialized_start=32
-  _ORDER._serialized_end=108
-  _ORDERREPLY._serialized_start=110
-  _ORDERREPLY._serialized_end=138
-  _ORDERSERVICE._serialized_start=140
-  _ORDERSERVICE._serialized_end=221
+  _ORDER._serialized_end=129
+  _ORDERREPLY._serialized_start=131
+  _ORDERREPLY._serialized_end=181
+  _ORDERSERVICE._serialized_start=183
+  _ORDERSERVICE._serialized_end=268
 # @@protoc_insertion_point(module_scope)

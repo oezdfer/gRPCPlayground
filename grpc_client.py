@@ -51,6 +51,12 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(name)s | %(level
 # A common Logger
 logger = logging.getLogger('gRPC_playground')
 
+
+def generate_order():
+
+    yield order_pb2.Order(instrumentID=4711, price=121, quantity=10, side=True)
+
+
 """ 
 Run method for the client 
 """
@@ -105,13 +111,21 @@ def run(count, remotehost=None, port=None):
 
             for i in range(count):
                 try:
-                    response = stub.AddOrder(order_pb2.Order(instrumentID=4711, price=121, quantity=10, side=True))
+                    #order_stream = stub.AddOrder(order_pb2.Order(instrumentID=4711, price=121, quantity=10, side=True))
 
-                    print("Result = {}".format(response.result))    
+                    #response = stub.AddOrder(order_pb2.Order(instrumentID=4711, price=121, quantity=10, side=True))
+
+                    response = stub.AddOrder(generate_order())
+                    #for response in stub.AddOrder(next(generate_order())):
+                    logger.debug("Result = {}".format(response.result))
+                    #logger.debug("Result = {}".format(response.result))    
+                    
                     # Display information for each thousand transaction
-                    if i % 5000 == 0:
+                    if i % 1000 == 0:
                         logger.debug('{} transactions and elapsed time {:0.4f} in seconds'.format(i, time.perf_counter() - start_time))
                     
+                # Read from an async generator
+        
                 except grpc.RpcError as err:
                         
                     if err.code() == grpc.StatusCode.UNAVAILABLE:
@@ -120,6 +134,8 @@ def run(count, remotehost=None, port=None):
                         exit()
 
             logger.info('transactions and elapsed time {:0.4f} in seconds'.format(time.perf_counter() - start_time))
+
+
 
         except KeyboardInterrupt:
             print("Keyboard")
