@@ -175,4 +175,4 @@ if __name__ == '__main__':
     logger.info("Client is started to run ...")
    
     # Run Baby run ...
-    run( args.count, args.remotehost, args.port )
+    run( args.count, args.remote_host, args.port )

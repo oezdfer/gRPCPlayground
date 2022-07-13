@@ -5,7 +5,6 @@ import sys
 import time
 import logging
 import argparse
-from xmlrpc.client import Boolean
 
 import grpc
 import order_pb2
@@ -42,8 +41,14 @@ class Greeter(order_pb2_grpc.OrderService):
         return order_pb2.OrderReply(result=True)
 
 
-def serve( server_address=None, port=None, use_tsl=None ):
+def serve(server_address=None, port=None, use_tsl=None):
 
+    """
+    :brief Serve method 
+    :param server_address 
+    :param port 
+    :param use_tsl
+    """
     logger.info("gRCP Server is started to serve ...")
 
     interceptors = [ErrorLoggerInterceptor()]
@@ -94,10 +99,11 @@ if __name__ == '__main__':
     p.add_argument('-v', '--verbose', action='store_true',
         help='Verbose mode for logging')               
 
+    # parse to get the arguments
     args = p.parse_args()
 
     if args.verbose:
-      logger.setLevel(logging.DEBUG)
+        logger.setLevel(logging.DEBUG)
 
     logger.info("gRCP Server is started to run ...")
     logger.debug("Arguments {} ".format(args))
