@@ -2,7 +2,9 @@
 
 from __future__ import print_function
 
+from google.protobuf.timestamp_pb2 import Timestamp
 import time
+import datetime
 import logging
 import argparse
 from xmlrpc.client import Boolean
@@ -19,8 +21,8 @@ class DataClientInterceptor(ClientInterceptor):
         self,
         method,
         request_or_iterator,
-        call_details: grpc.ClientCallDetails,
-    ):
+        call_details: grpc.ClientCallDetails,):
+
         """
         Args:
             method: A function that proceeds with the invocation by executing the next
@@ -40,13 +42,12 @@ class DataClientInterceptor(ClientInterceptor):
             [("authorization", "Bearer mysecrettoken")],
             call_details.credentials,
             call_details.wait_for_ready,
-            call_details.compression,
-        )
+            call_details.compression,)
 
         return method(request_or_iterator, new_details)
 
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(name)s | %(levelname)s | %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(name)s | %(lineno)d | %(levelname)s | %(message)s')
 
 # A common Logger
 logger = logging.getLogger('gRPC_playground')
@@ -54,7 +55,10 @@ logger = logging.getLogger('gRPC_playground')
 
 def generate_order():
 
-    yield order_pb2.Order(instrumentID=4711, price=121, quantity=10, side=True)
+    timestamp = Timestamp()
+    timestamp.GetCurrentTime()
+
+    yield order_pb2.Order(instrumentID=4711, price=121, quantity=10, side=True, requestTime=timestamp)
 
 
 """ 
@@ -116,8 +120,12 @@ def run(count, remotehost=None, port=None):
                     #response = stub.AddOrder(order_pb2.Order(instrumentID=4711, price=121, quantity=10, side=True))
 
                     response = stub.AddOrder(generate_order())
+
+                    for resp in response:
+                        logger.debug("Result = {}".format(resp.responseTime)) 
+
                     #for response in stub.AddOrder(next(generate_order())):
-                    logger.debug("Result = {}".format(response.result))
+                    #logger.debug("Result = {}".format(response.result))
                     #logger.debug("Result = {}".format(response.result))    
                     
                     # Display information for each thousand transaction
@@ -138,7 +146,7 @@ def run(count, remotehost=None, port=None):
 
 
         except KeyboardInterrupt:
-            print("Keyboard")
+            print("Keyboard - Interrupt")
             channel.unsubscribe(close)
             exit()
 
@@ -151,8 +159,9 @@ def run(count, remotehost=None, port=None):
             exit()
 
         finally:
-            print("Finaly, channel is closed")
-            channel.close()
+            pass
+            #print("Finaly, channel is closed")
+            #channel.close()
 
     # elapsed time calculation
     print('Elapsed time {:0.4f} in seconds'.format(time.perf_counter() - start_time))

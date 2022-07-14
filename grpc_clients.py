@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # parse to get the arguments
     args = p.parse_args()
 
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(name)s | %(levelname)s | %(message)s')
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(name)s | %(lineno)d | %(levelname)s | %(message)s')
 
     # A common Logger
     logger = logging.getLogger('gRPC_playground')

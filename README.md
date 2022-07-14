@@ -10,7 +10,7 @@ This __gRPC__ GitHub repository is used to analyze gRPC protocol with different 
 
 The Google Protocol buffer compiler *protoc* is used to create the Python programming languange specific Google procol buffer artifacts.
 
-An *Order* of 25 - byte is used for the prototyping. See *order.proto* file: 
+An *Order* of 33 - byte is used for the prototyping. An *OrderRely* consist of *9* byte. See *order.proto* file: 
 
 ``` python
 message Order {
@@ -18,6 +18,12 @@ message Order {
   int64 price = 2;
   int64 quantity = 3;
   bool side = 4;
+  google.protobuf.Timestamp requestTime = 5;
+}
+
+message OrderReply {
+  bool result = 1;
+  google.protobuf.Timestamp responseTime = 2;
 }
 ```
 
@@ -32,6 +38,14 @@ The generated Google protocol buffer Python artifacts are:
 ``` shell
 order_pb2.py
 order_pb2_grcp.py
+```
+
+The *stream* approach for the communication between gRPC server and client is chosen in order to keep the *sending order* of the sending order messages. 
+
+``` python
+service OrderService {
+  rpc AddOrder(stream Order) returns (stream OrderReply) {  }
+}
 ```
 
 ## Certicate for encryption
@@ -56,8 +70,8 @@ openssl x509 -in server.crt -text -noout
 
 ## Single gRPC Server
  
-The single *gRPC server* runs with a threadpool with *10* workers to receive the incoming messages. 
-The gRPC server receives the sent orders by the gRPC clients and replies with a *Boolean* that the order is received.
+The single *gRPC server* runs with a threadpool with *10* workers (can be configured by passing an argument) to receive the incoming (order)messages. 
+The gRPC server receives the sent orders with a *requestTime* timestamp by the gRPC clients and replies with a *Boolean* and a *responseTime* timestamp that the order is received.
 
 ```python
 python3 grpc_server.py --help
@@ -65,12 +79,12 @@ python3 grpc_server.py --help
 
 ## Single gRPC Client
 
-The *gRPC client* sends an *Order* by using the Google protocol buffer to the single gRPC server.  
+The *gRPC client* sends an *Order* with a *requestTime* timestamp by using the Google protocol buffer to the single gRPC server.  
 
 ## Multiple gRPC Clients
 
 The *multiple gRPC clients* is used to simulate several *gRPC clients*. All gRPC clients are started in parallell.  
-All gRPC clients is based on the same logic. They simply send an Order to the gRPC server. 
+All gRPC clients is based on the same logic. They simply send an Order with a *requestTime* timestamp to the gRPC server. 
 
 ### Localhost test results
 

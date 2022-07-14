@@ -1,5 +1,6 @@
 #! /usr/bin/python3
 
+from google.protobuf.timestamp_pb2 import Timestamp
 from concurrent import futures
 import sys
 import time
@@ -12,7 +13,7 @@ import order_pb2_grpc
 
 from grpc_interceptor import ServerInterceptor
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(name)s | %(levelname)s | %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(name)s | %(lineno)d | %(levelname)s | %(message)s')
 
 # A common Logger
 logger = logging.getLogger('gRPC_playground')
@@ -37,12 +38,19 @@ Order Receiver class
 
 class Greeter(order_pb2_grpc.OrderService):
 
-    def AddOrder(self, order_request, context):
-        logger.debug("Order received with {}".format(order_request))
+    def AddOrder(self, order_requests, context):
+        
+        for order_request in order_requests:
+            logger.debug("Order received with {}".format(order_request))
        
         #return order_pb2.OrderReply(result=True)
-        yield order_pb2.OrderReply(result=True)
-
+        #yield order_pb2.OrderReply(result=True)
+       
+        timestamp = Timestamp()
+        timestamp.GetCurrentTime()
+        
+        yield order_pb2.OrderReply(result=True, responseTime=timestamp)
+       
 
 def serve(server_address=None, port=None, use_tsl=None, max_workers=None):
 
@@ -52,6 +60,7 @@ def serve(server_address=None, port=None, use_tsl=None, max_workers=None):
     :param port a SSL port such as 443 ? 
     :param use_tsl whether an encryption is used
     """
+
     logger.info("gRCP Server is started to serve ...")
 
     interceptors = [ErrorLoggerInterceptor()]

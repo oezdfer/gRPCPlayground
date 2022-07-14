@@ -12,9 +12,10 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0border.proto\x12\x0fgrpc_playground\"a\n\x05Order\x12\x14\n\x0cinstrumentID\x18\x01 \x01(\x03\x12\r\n\x05price\x18\x02 \x01(\x03\x12\x10\n\x08quantity\x18\x03 \x01(\x03\x12\x0c\n\x04side\x18\x04 \x01(\x08\x12\x13\n\x0brequestTime\x18\x05 \x01(\x03\"2\n\nOrderReply\x12\x0e\n\x06result\x18\x01 \x01(\x08\x12\x14\n\x0cresponseTime\x18\x02 \x01(\x03\x32U\n\x0cOrderService\x12\x45\n\x08\x41\x64\x64Order\x12\x16.grpc_playground.Order\x1a\x1b.grpc_playground.OrderReply\"\x00(\x01\x30\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0border.proto\x12\x0fgrpc_playground\x1a\x1fgoogle/protobuf/timestamp.proto\"}\n\x05Order\x12\x14\n\x0cinstrumentID\x18\x01 \x01(\x03\x12\r\n\x05price\x18\x02 \x01(\x03\x12\x10\n\x08quantity\x18\x03 \x01(\x03\x12\x0c\n\x04side\x18\x04 \x01(\x08\x12/\n\x0brequestTime\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"N\n\nOrderReply\x12\x0e\n\x06result\x18\x01 \x01(\x08\x12\x30\n\x0cresponseTime\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp2U\n\x0cOrderService\x12\x45\n\x08\x41\x64\x64Order\x12\x16.grpc_playground.Order\x1a\x1b.grpc_playground.OrderReply\"\x00(\x01\x30\x01\x62\x06proto3')
 
 
 
@@ -38,10 +39,10 @@ _ORDERSERVICE = DESCRIPTOR.services_by_name['OrderService']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _ORDER._serialized_start=32
-  _ORDER._serialized_end=129
-  _ORDERREPLY._serialized_start=131
-  _ORDERREPLY._serialized_end=181
-  _ORDERSERVICE._serialized_start=183
-  _ORDERSERVICE._serialized_end=268
+  _ORDER._serialized_start=65
+  _ORDER._serialized_end=190
+  _ORDERREPLY._serialized_start=192
+  _ORDERREPLY._serialized_end=270
+  _ORDERSERVICE._serialized_start=272
+  _ORDERSERVICE._serialized_end=357
 # @@protoc_insertion_point(module_scope)
