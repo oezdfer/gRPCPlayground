@@ -4,10 +4,8 @@ from __future__ import print_function
 
 from google.protobuf.timestamp_pb2 import Timestamp
 import time
-import datetime
 import logging
 import argparse
-from xmlrpc.client import Boolean
 
 import grpc
 import order_pb2
@@ -54,7 +52,9 @@ logger = logging.getLogger('gRPC_playground')
 
 
 def generate_order():
-
+    """
+    :brief Generates an Order with a timestamp
+    """
     timestamp = Timestamp()
     timestamp.GetCurrentTime()
 
@@ -87,7 +87,7 @@ def run(count, remotehost=None, port=None):
     server_port = 50051
 
     if remotehost is not None:
-        server_host=remotehost
+        server_host = remotehost
         logger.debug("Passed remotehost {}".format(remotehost))
 
     """
@@ -115,24 +115,20 @@ def run(count, remotehost=None, port=None):
 
             for i in range(count):
                 try:
-                    #order_stream = stub.AddOrder(order_pb2.Order(instrumentID=4711, price=121, quantity=10, side=True))
-
+                    
                     #response = stub.AddOrder(order_pb2.Order(instrumentID=4711, price=121, quantity=10, side=True))
 
-                    response = stub.AddOrder(generate_order())
+                    responses = stub.AddOrder(generate_order())
 
-                    for resp in response:
-                        logger.debug("Result = {}".format(resp.responseTime)) 
+                    for response in responses:
+                        logger.debug("Result = {}".format(response.responseTime)) 
 
                     #for response in stub.AddOrder(next(generate_order())):
-                    #logger.debug("Result = {}".format(response.result))
                     #logger.debug("Result = {}".format(response.result))    
                     
                     # Display information for each thousand transaction
                     if i % 1000 == 0:
                         logger.debug('{} transactions and elapsed time {:0.4f} in seconds'.format(i, time.perf_counter() - start_time))
-                    
-                # Read from an async generator
         
                 except grpc.RpcError as err:
                         
@@ -140,10 +136,9 @@ def run(count, remotehost=None, port=None):
                         print("RpcError - UNAVAILABLE")
                         print(err.details())
                         exit()
-
-            logger.info('transactions and elapsed time {:0.4f} in seconds'.format(time.perf_counter() - start_time))
-
-
+            
+            if count % 1000 == 0:
+                logger.info('{} transactions and elapsed time {:0.4f} in seconds'.format(count, time.perf_counter() - start_time))
 
         except KeyboardInterrupt:
             print("Keyboard - Interrupt")
@@ -151,7 +146,6 @@ def run(count, remotehost=None, port=None):
             exit()
 
         except grpc.RpcError as err:
-                
             if err.code() == grpc.StatusCode.UNAVAILABLE:
                 print("RpcError - UNAVAILABLE")
                 
@@ -163,8 +157,8 @@ def run(count, remotehost=None, port=None):
             #print("Finaly, channel is closed")
             #channel.close()
 
-    # elapsed time calculation
-    print('Elapsed time {:0.4f} in seconds'.format(time.perf_counter() - start_time))
+        # elapsed time calculation
+        print('Elapsed time {:0.4f} in seconds'.format(time.perf_counter() - start_time))
 
 
 def close(channel):
